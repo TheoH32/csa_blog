@@ -4,12 +4,46 @@
     <nav>
       <ul>
         <li class="fork"><a href="{{site.baseurl}}/">Home</a></li>
-        <li class="fork"><a href="{{site.baseurl}}/csse">CSSE</a></li>
-        <li class="fork"><a href="{{site.baseurl}}/csp">CSP</a></li>
-        <li class="fork"><a href="{{site.baseurl}}/csa">CSA</a></li>
+        <!-- buttons
+        <li class="fork"><a href="{{site.baseurl}}/csa">B3</a></li>
+        --->
+        <li class="fork"><a href="{{site.baseurl}}/api">API</a></li>
+        <li class="fork"><a href="{{site.baseurl}}/planner">Planner</a></li>
         <li class="fork"><a href="{{site.baseurl}}/blogs">Blogs</a></li>
-        <li class="title"><a href="{{ site.github.repository_url }}#readme">View On GitHub</a></li>
+        <li class="title"><a href="{{site.baseurl}}/contacts">Contact Me</a></li>
       </ul>
     </nav>
   </div><!-- end header -->
 </header>
+
+<style>
+  #header nav ul li a {
+    color: white;
+    border: 1px solid #111111;
+    background: linear-gradient(#d4cfd7, #000000);
+    border-radius: 2px;
+    box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.3), 0px 3px 7px rgba(0, 0, 0, 0.7);
+    background-color: #d3d3d3;
+    padding: 10px 12px;
+    margin-top: 6px;
+    line-height: 14px;
+    font-size: 14px;
+    display: inline-block;
+    text-align: center;
+  }
+
+  #header nav ul li a:hover {
+    background: linear-gradient(#898a86, #676965);
+    background-color: #d2d2d2;
+    border: 1px solid #000000;
+    box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.2), 0px 1px 0px rgba(0, 0, 0, 0);
+  }
+
+  #header nav ul li {
+    padding: 0px 10px;
+  }
+
+  p {
+    font-size: 1.2em;
+  }
+</style>
