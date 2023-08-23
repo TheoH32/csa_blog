@@ -43,3 +43,6 @@ description: Building my first Blog.
 ## Java Notebook
 - JAVA_HOME Path is just not working
 
+![](images/freeform.png)
+
+
