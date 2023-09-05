@@ -55,14 +55,21 @@
             cursor: pointer;
             font-size: 16px;
         }
-        .namebox {
-            align-items: center;
-            border: darkgray 2px solid;
-        }
+        .namebox,
+        .serverStatus,
         .usernamebox {
-            align-items: center;
+            flex: 1; /* Equal width for each box */
             border: darkgray 2px solid;
+            padding: 5px;
+            margin: 5px; /* Add margin between the boxes */
         }
+        .userContent {
+            display: flex;
+            flex-direction: row; /* Display children in a row */
+            justify-content: space-between; /* Add space between children */
+            align-items: center; /* Vertically align children */
+        }
+
 
 </style>
 </head>
@@ -70,6 +77,19 @@
 <body>
     <input type="text" id="userInput" placeholder="Enter Github user...">
     <button onclick="fetchUser()">Enter</button>
+    <table id="view_table">
+        <thead>
+            <tr>
+            <th>GitHub ID</th>
+            <th>Name</th>
+            <th>Server Needed</th>
+            <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="result">
+            <!-- javascript generated data -->
+        </tbody>
+    </table>
     <div class="overlay" id="popupOverlay">
         <div class="popup">
             <div class="fetchResults">
@@ -78,14 +98,19 @@
                 <h2 id="bio"></h2>
                 <div id="profilelink"></div>
                 <p id="additionalInfo"></p>
-                <div class="namebox">
-                    <p>Name:</p>
-                    <input type="name" id="nameplaceholder" placeholder="">
-                </div>
-                <input type="checkbox" name="server_needed" id="server_needed">
-                <div class="usernamebox">
-                    <p>Github Username:</p>
-                    <input type="username" id="usernameplaceholder" placeholder="">
+                <div class="userContent">
+                    <div class="namebox">
+                        <p>Name:</p>
+                        <input type="name" id="nameplaceholder" placeholder="">
+                    </div>
+                    <div class="serverStatus">
+                        <p>Server Needed?</p>
+                        <input type="checkbox" name="server_needed" id="server_needed">
+                    </div>
+                    <div class="usernamebox">
+                        <p>Github Username:</p>
+                        <input type="username" id="usernameplaceholder" placeholder="">
+                    </div>
                 </div>
             </div>
             <button onclick="()">Add User</button>
@@ -95,6 +120,7 @@
 
 
 <script>
+    
         function openPopup() {
             document.getElementById("popupOverlay").style.display = "flex";
         }
@@ -120,6 +146,8 @@
             request.onreadystatechange = function() {
                 if (request.readyState === 4 && request.status === 200) {
                     let response = JSON.parse(request.responseText);
+
+                    console.log(response)
 
                     let img = document.createElement("img");
                     img.src = response.avatar_url;
@@ -150,8 +178,11 @@
                     profileLinkDiv.appendChild(profileLink);
                     additionalInfoDiv.innerHTML = additionalInfo;
 
+                    let nameVar = document.getElementById("nameplaceholder");
+                    nameVar.value = response.name;
+
                     let usernameVar = document.getElementById("usernameplaceholder");
-                    usernameVar.placeholder = response.login;
+                    usernameVar.value = response.login;
 
 
                 }
