@@ -93,6 +93,7 @@
         </div>
     </div>
 
+
 <script>
         function openPopup() {
             document.getElementById("popupOverlay").style.display = "flex";
@@ -110,8 +111,8 @@
             let request = new XMLHttpRequest();
 
             const url = `https://api.github.com/users/${userInput}`;
-            require('dotenv').config(); // Load environment variables from .env file
-            const token = process.env.GITHUB_TOKEN;
+            const token = "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";
+
 
             request.open('GET', url);
             request.setRequestHeader('Authorization', `Bearer ${token}`);
