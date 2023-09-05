@@ -113,7 +113,6 @@
             const url = `https://api.github.com/users/${userInput}`;
             const token = "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";
 
-
             request.open('GET', url);
             request.setRequestHeader('Authorization', `Bearer ${token}`);
             request.send();
