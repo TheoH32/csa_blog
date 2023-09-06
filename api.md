@@ -113,13 +113,288 @@
                     </div>
                 </div>
             </div>
-            <button onclick="()">Add User</button>
+            <button onclick="create_user()">Add User</button>
             <button onclick="closePopup()">Close</button>
         </div>
     </div>
 
 
 <script>
+    // prepare HTML result container for new output
+    const resultContainer = document.getElementById("result");
+    // prepare URL's to allow easy switch from deployment and localhost
+    //const url = "http://localhost:8180/api/users/";
+    const url = "https://devops.nighthawkcodingsociety.com/api/users/"
+    
+    // Standard definitions
+    const request_options = {
+        mode: 'cors',
+        cache: 'default',
+        credentials: 'omit',
+        headers: {
+        'Content-Type': 'application/json'
+        }
+    };
+
+    // Load users on page entry
+    read_users();
+
+
+    // Call the API with GET request (read)
+    function read_users() {
+        // prepares request options
+        const read_options = {
+        ...request_options,
+        method: 'GET'
+        };
+
+        // fetch the data from API
+        fetch(url, read_options)
+        // response is a RESTful "promise" on any successful fetch
+        .then(response => {
+            // check for response errors
+            if (response.status !== 200) {
+                const errorMsg = 'Database read error: ' + response.status;
+                console.log(errorMsg);
+                const tr = document.createElement("tr");
+                const td = document.createElement("td");
+                td.innerHTML = errorMsg;
+                tr.appendChild(td);
+                resultContainer.appendChild(tr);
+                return;
+            }
+            // valid response will have json data
+            response.json().then(data => {
+                console.log(data);
+                // delete old data
+                while (resultContainer.children.length) {
+                resultContainer.removeChild(resultContainer.lastChild);
+                }
+                // update new data
+                for (let row in data) {
+                console.log(data[row]);
+                add_row(data[row]);
+                }
+            })
+        })
+        // catch fetch errors (ie ACCESS to server blocked)
+        .catch(err => {
+        console.error(err);
+        const tr = document.createElement("tr");
+        const td = document.createElement("td");
+        td.innerHTML = err;
+        tr.appendChild(td);
+        resultContainer.appendChild(tr);
+        });
+    }
+
+    function create_user(){
+        
+        const body = {
+            uid: document.getElementById("usernameplaceholder").value,
+            name: document.getElementById("nameplaceholder").value,
+            server_needed: document.getElementById("server_needed").checked 
+        };
+
+        // Call the API with POST request (create)
+        const post_options = {
+        ...request_options,
+        method: 'POST',
+        body: JSON.stringify(body),
+        };
+
+        // URL for Create API
+        // Fetch API call to the database to create a new user
+        fetch(url, post_options)
+        .then(response => {
+            // trap error response from Web API
+            if (response.status !== 200) {
+            const errorMsg = 'Database create error: ' + response.status;
+            console.log(errorMsg);
+            const tr = document.createElement("tr");
+            const td = document.createElement("td");
+            td.innerHTML = errorMsg;
+            tr.appendChild(td);
+            resultContainer.appendChild(tr);
+            return;
+            }
+            // response contains valid result
+            response.json().then(data => {
+                console.log(data);
+                //add a table row for the new/created userid
+                add_row(data);
+            })
+        })
+
+        closePopup()
+    }
+
+
+    function updateEvent(id) {
+    // Handle update action here
+    console.log("Update button clicked for ID:", id);
+
+    // Find the existing row
+    const existingRow = document.getElementById(`row-${id}`);
+    
+    // Input fields for update
+    const uidInput = document.createElement("input");
+    uidInput.type = "text";
+    uidInput.value = document.getElementById(`uid-${id}`).innerHTML;
+    
+    const nameInput = document.createElement("input");
+    nameInput.type = "text";
+    nameInput.value = document.getElementById(`name-${id}`).innerHTML;
+    
+    const serverNeededInput = document.createElement("input");
+    serverNeededInput.type = "checkbox";
+    serverNeededInput.checked = document.getElementById(`serverNeeded-${id}`).innerHTML === "Yes";
+
+    // Save button
+    const saveBtn = document.createElement("button");
+    saveBtn.textContent = "Save";
+    saveBtn.addEventListener("click", () => {
+        // Construct the updated data object
+        const updatedData = {
+        uid: uidInput.value,
+        name: nameInput.value,
+        server_needed: serverNeededInput.checked
+        };
+
+        // Call the API with a PUT request (update)
+        const update_options = {
+        ...request_options,
+        method: 'PUT',
+        body: JSON.stringify(updatedData)
+        };
+
+        fetch(`${url}${id}`, update_options)
+        .then((response) => {
+            if (response.status === 200) {
+            // Update was successful
+            read_users(); // Refresh the table
+            } else {
+            // Display error message in a cell
+            const errorCell = document.createElement("td");
+            errorCell.style.color = "red";
+            errorCell.textContent = "Update failed. Please try again.";
+            existingRow.appendChild(errorCell);
+            }
+        })
+        .catch((error) => {
+            console.error("Error updating user:", error);
+        });
+    });
+
+    // Create <td> elements for each input
+    const uidCell = document.createElement("td");
+    uidCell.appendChild(uidInput);
+
+    const nameCell = document.createElement("td");
+    nameCell.appendChild(nameInput);
+    
+    const serverNeededCell = document.createElement("td");
+    serverNeededCell.appendChild(serverNeededInput);
+
+    const saveBtnCell = document.createElement("td");
+    saveBtnCell.appendChild(saveBtn);
+
+    // Remove existing row content
+    while (existingRow.firstChild) {
+        existingRow.removeChild(existingRow.firstChild);
+    }
+
+    // Add input fields and save button to the form
+    existingRow.appendChild(uidCell);
+    existingRow.appendChild(nameCell);
+    existingRow.appendChild(serverNeededCell);
+    existingRow.appendChild(saveBtnCell);
+    }
+
+    function deleteEvent(id) {
+    // Handle delete action here
+    console.log("Delete button clicked for ID:", id);
+
+    // Prompt user for password input
+    const password = prompt("Enter 'delete' to confirm:");
+
+    // Check if the entered password is correct
+    if (password === "delete") {
+        // Call the delete API with a DELETE request
+        const delete_options = {
+        ...request_options,
+        method: 'DELETE',
+        };
+
+        fetch(`${url}${id}`, delete_options)
+        .then((response) => {
+            if (response.status === 200) {
+            // Deletion was successful
+            read_users(); // Refresh the table
+            } else {
+            // Display error message in a cell
+            const errorCell = document.createElement("td");
+            errorCell.style.color = "red";
+            errorCell.textContent = "Delete failed. Please try again.";
+            existingRow.appendChild(errorCell);
+            }
+        })
+        .catch((error) => {
+            console.error("Error deleting user:", error);
+        });
+    } else {
+        // Display error message for incorrect password
+        const errorCell = document.createElement("td");
+        errorCell.style.color = "red";
+        errorCell.textContent = "Incorrect password. Deletion canceled.";
+        existingRow.appendChild(errorCell);
+    }
+    }
+
+
+    function add_row(data) {
+    const tr = document.createElement("tr");
+    tr.id = `row-${data.id}`; // Set a unique ID for the row
+
+    const uid = document.createElement("td");
+    const name = document.createElement("td");
+    const serverNeeded = document.createElement("td");
+    const actions = document.createElement("td");
+
+    // obtain data that is specific to the API
+    uid.innerHTML = data.uid;
+    uid.id = `uid-${data.id}`; // Set a unique ID for the GitHub ID cell
+
+    name.innerHTML = data.name;
+    name.id = `name-${data.id}`;
+    serverNeeded.innerHTML = data.server_needed ? "Yes" : "No";
+    serverNeeded.id = `serverNeeded-${data.id}`;
+
+    // "Update" and "Delete" buttons
+    const updateBtn = document.createElement("button");
+    updateBtn.textContent = "Update";
+    updateBtn.addEventListener("click", () => {
+        updateEvent(data.id);
+    });
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Delete";
+    deleteBtn.addEventListener("click", () => {
+        deleteEvent(data.id);
+    });
+
+    // Add buttons to the actions column
+    actions.appendChild(updateBtn);
+    actions.appendChild(deleteBtn);
+
+    // add HTML to container
+    tr.appendChild(uid);
+    tr.appendChild(name);
+    tr.appendChild(serverNeeded);
+    tr.appendChild(actions);
+
+    resultContainer.appendChild(tr);
+    }
     
         function openPopup() {
             document.getElementById("popupOverlay").style.display = "flex";
@@ -179,9 +454,11 @@
                     additionalInfoDiv.innerHTML = additionalInfo;
 
                     let nameVar = document.getElementById("nameplaceholder");
+                    nameVar.value = ""
                     nameVar.value = response.name;
 
                     let usernameVar = document.getElementById("usernameplaceholder");
+                    usernameVar.value = ""
                     usernameVar.value = response.login;
 
 
