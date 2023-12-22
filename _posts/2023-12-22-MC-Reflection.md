@@ -52,3 +52,31 @@ description: code code code
 
 ![39](https://raw.githubusercontent.com/TheoH32/csa_blog/main/images/cb2/m39.png?token=GHSAT0AAAAAACFYRY5DO3HO3BG7XUI2E2WGZMF5QEQ)
 ### The first for loop uses the set method to change the value of each element in students to “Alex”. When the set method is called, it returns the value that was originally at this index. So, the first loop will print Alex Bob Carl. At this point all elements have been set to “Alex”. The second for loop uses an enhanced for loop to access every element and will print Alex Alex Alex.
+
+
+# Missed Topics
+
+- Class Inheritance and Method Overriding: Explaining the behavior of classes A and B, where B inherits from A and overrides the show method.
+
+- Initialization and Variable Assignment: Discussing the importance of proper initialization, especially in the context of a variable like maxVal.
+
+- String Concatenation and Logical Errors: Addressing issues related to string concatenation leading to incorrect results in a method.
+
+- Nested Loops and Loop Control: Analyzing the behavior of nested loops, specifically understanding the relationship between the outer and inner loops.
+
+- Array Manipulation: Discussing how specific elements in an array are manipulated, including the calculation of values in a multi-dimensional array.
+
+- Logical Operators and Conditions: Pointing out logical errors in conditional statements, emphasizing the significance of proper use of logical operators.
+
+- Mathematical Operations: Involving understanding the result of mathematical operations, such as multiplication and division.
+
+- Recursion: Analyzing a recursive method and its behavior in a specific context, including the base case and return values.
+
+- Binary Search Algorithm: Explaining the mechanics of a binary search algorithm and identifying the return value.
+
+- Enhanced for Loop: Describing the behavior of an enhanced for loop when accessing elements in an array.
+
+- Attention to Detail: Recognizing the impact of details like the presence of the '!' sign in a logical condition.
+
+# Journey
+### I think this was kind of a wake up call that maybe I don't know as much I should about Java structure. I need to look over the topics above that I commonly missed and reflect how and what I struggle with. I will study and do the hacks over break in an attempt to better align myself with my academic goals for this class.
