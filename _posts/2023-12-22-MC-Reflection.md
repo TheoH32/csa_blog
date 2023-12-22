@@ -1,12 +1,10 @@
 ---
-toc: true
-comments: true
 layout: post
 title: MC Blog
 description: code code code
 ---
 
-![3](https://github.com/TheoH32/csa_blog/blob/main/images/cb2/m3.png)
+![3]()
 ### The code in the image defines two classes, A and B. Class A has a show method that simply prints "A". Class B inherits from class A and overrides the show method to print "B". The code then creates an object of type B and calls its show method. Since the show method in class B is the one that is actually executed, the output will be "B".
 
 ![4]()
